@@ -36,30 +36,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache PlatformIO
-        uses: actions/cache@v4
-        with:
-          path: ~/.platformio
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.9"
-
-      - name: Install PlatformIO
-        run: |
-          python -m pip install --upgrade pip
-          pip install --upgrade platformio
-
       - name: Set up graphviz
         uses: ts-graphviz/setup-graphviz@v2
 
@@ -69,15 +45,11 @@ jobs:
           working-directory: "./doc/doxygen"
           doxyfile-path: "./${{ matrix.environment }}Doxyfile"
 
-      - name: Print doxygen warnings
-        if: ${{ failure() }}
-        run: cat ./doc/doxygen/doxygen_warnings.txt
-
       # Add the .nojekyll file
       - name: nojekyll
         if: ${{ github.event_name == 'push' }}
         run: |
-          touch _build/.nojekyll
+          touch doc/api/html/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
