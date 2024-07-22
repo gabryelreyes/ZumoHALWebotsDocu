@@ -45,17 +45,11 @@ jobs:
           working-directory: "./doc/doxygen"
           doxyfile-path: "./${{ matrix.environment }}Doxyfile"
 
-      # Add the .nojekyll file
-      - name: nojekyll
-        if: ${{ github.event_name == 'push' }}
-        run: |
-          touch ./doc/api/html/.nojekyll
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./doc/api/html
+          publish_dir: doc/api/html
           force_orphan: true
