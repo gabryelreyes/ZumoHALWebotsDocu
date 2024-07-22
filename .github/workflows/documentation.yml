@@ -49,7 +49,7 @@ jobs:
       - name: nojekyll
         if: ${{ github.event_name == 'push' }}
         run: |
-          touch doc/api/html/.nojekyll
+          touch ./doc/api/html/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -57,5 +57,5 @@ jobs:
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: doc/api/html
+          publish_dir: ./doc/api/html
           force_orphan: true
